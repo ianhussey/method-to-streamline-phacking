@@ -1,0 +1,88 @@
+---
+title: "A method to streamline *p*-hacking"
+author: "Ian Hussey"
+bibliography: "references.bib"
+output:
+  pdf_document:
+    highlight: haddock
+  word_document: 
+    highlight: haddock
+    reference_docx: "reference_document.docx" 
+abstract: "The analytic strategy of *p*-hacking has rapidly accelerated our advancement of the goals of psychological science [i.e., acquiring publications, tenure, and flair: @bakker_rules_2012], but has suffered a number of setbacks in recent years. In order to remediate this, this article presents a statistical approach that can greatly accelerate and streamline the *p*-hacking process. Results of a simulation study are presented, and an R script is provided. In the absence of systemic changes to modal *p*-hacking practices within psychological science [e.g., worrying trends such as preregistration and replication: @munafo_manifesto_2017], we argued that vast amounts of time and research funding could be saved through the widespread adoption of this innovative statistical approach."
+---
+
+With a few recent and unfortunate exceptions [e.g., @camerer_evaluating_2018; @open_science_collaboration_estimating_2015], the discovery that *p* values can be hacked to support researchers hypotheses has proven to be of exceptional utility to the enterprise of psychological science [i.e., acquiring publications, tenure, and flair; see @bakker_rules_2012; @simmons_false-positive_2011 for tutorials]. However, efforts to further optimize the process of *p*-hacking have slow rate in recent years due to a number of unfortunate setbacks [e.g., wider use of replication and pre-registration: see @munafo_manifesto_2017; @nosek_promoting_2015; @nosek_preregistration_2018]. 
+
+In this article, I introduce the *p~economical~* metric and demonstrate how it can streamline the process of *p*-hacking your results. While this metric does suffer from the mild flaw of providing zero diagnosticity of the presence or absence of a true effect, this property is largely irrelevant to our primary goals (e.g., giving Ted Talks). Importantly, the metric possesses three superior characteristics. First, it is non-inferior to current *p*-hacking practices, which also tell us little about the presence or absence of a true effect [@hussey_self-citation_2018]. Second, it retains a far more important property of hacked *p* values: it has high predictive validity for publishability. Finally, it also provides economic benefits relative to the high total life-cycle costs associated with traditional *p*-hacking (e.g., non-comprehensive graduate training in statistics, or the opportunity costs of time that could be spent noise-mining other data sets).
+
+# Methods and results
+
+Following standard practices, readers are suggested to skip this section and keep scrolling past any scary looking equations or R code. For more ambitious readers, the *p~economical~* metric follows the same internal logic as traditional *p*-hacked analytic strategies [see @bem_feeling_2011]. Loosely speaking, this conforms to the following algorithm: keep changing aspects of the analysis (e.g., exclusion strategies, covariates, IVs/DVs, grad students, your moral compass) until *p* < .05, then stop and report this value. The *p~economical~* was inspired by the observation that, regardless of the specifics of any given *p*-hacking strategy, the product of this process is highlight reliable (*p* < 05). As such, many intermediary steps are therefore arguably unnecessary, and the same end result can be obtained more efficiently by automation. This is accomplished by generating random numbers until one is found that is < .05. I will refer to this approach as a form of machine learning so as to increase my chance of getting published [@hussey_more_2018]. A R script to calculate *p~economical~* is provided below.
+
+```{r}
+
+# set an inital value
+p_economical <- 1
+
+# generate random numbers and stop when one is < .05
+while (p_economical >= .05) {
+  p_economical <- runif(n = 1)
+}
+
+# print this value
+print(paste("p_economical =", round(p_economical, 3)))
+
+```
+
+Decisions made on the basis of traditional hacked *p* values and the *p~economical~* metric were then compared in a simulation study. In line with modal *p*-hacking practices, only the key property of publishability (i.e., *p* < .05) was considered. 10,000 cases were simulated (see Appendix 1). Results demonstrated the results of *p~economical~* and traditional *p*-hacked results are congruent in 100% of cases. Although variation in individual coefficients frequently differ by large margins, given that both strategies satisfy the core criterion of being diagnostic of publishability, this minor discrepancy is easily ignored.
+
+# Discussion
+
+Traditional *p*-hacking involves starting with a sound analytic strategy and then iteratively degrading this until the results support one's hypothesis. On the basis that this strategy almost invariably returns significant results, many burdensome aspects of this analytic process can arguably be bypassed via automation. The most parsimonious method was selected: random number generation. Results from a simulation study demonstrate that decision making on the basis of traditional hacked *p* values and *p~economical~* are equivalent, and that the latter requires several orders of magnitude less time and resources to calculate.
+
+More radical extensions of this general strategy are also possible: given the grey area between intentional *p*-hacking and outright data fabrication (given that both serve to purposefully fabricate results), use of the *p~economical~* approach could also nullify the need for data collection, which arguably provides little added value. Academic productivity and more importantly flair can therefore be greatly increased through the widespread adoption of this approach. All materials, data, and code for the current article are most certainly not available on the Open Science Framework, you parasitic research communist [see @longo_data_2016].
+
+# Appendix 1: R code for simulation study
+
+```{r}
+
+simulation <- function() {
+  
+  # simulate publishability of results from econo_p
+  # set an inital p value
+  econo_p <- 1
+  
+  # generate random values for p, and stop when this value is < .05
+  while (econo_p >= .05) {
+    econo_p <- round(runif(1), 3)
+  }
+  
+  # decision making
+  if(econo_p < 0.05) {
+    publishable_econo_p = TRUE
+  } else {
+    publishable_econo_p = FALSE
+  }
+  
+  # simulation publishability of results from tradition (hacked) p values 
+  # p value set to upper bound of observable hacked p values
+  p = 0.049
+  
+  # decision making
+  if(p < 0.05) {
+    publishable_p = TRUE
+  } else {
+    publishable_p = FALSE
+  }
+  
+  return(publishable_econo_p == publishable_p)
+
+}
+
+# proportion of 10,000 simulated cases where conclusions agree
+mean(replicate(10000, simulation()))
+
+```
+
+# References
+
